@@ -1,6 +1,7 @@
 import type { Command } from "commander";
 
 import { loadConfig } from "../config/config.js";
+import { getI18n } from "../locale/index.js";
 import { defaultRuntime } from "../runtime.js";
 import { runSecurityAudit } from "../security/audit.js";
 import { fixSecurityFootguns } from "../security/fix.js";
@@ -28,9 +29,11 @@ function formatSummary(summary: { critical: number; warn: number; info: number }
 }
 
 export function registerSecurityCli(program: Command) {
+  const i18n = getI18n();
+
   const security = program
     .command("security")
-    .description("Security tools (audit)")
+    .description(i18n.t("cli.commands.security"))
     .addHelpText(
       "after",
       () =>
@@ -39,8 +42,8 @@ export function registerSecurityCli(program: Command) {
 
   security
     .command("audit")
-    .description("Audit config + local state for common security foot-guns")
-    .option("--deep", "Attempt live Gateway probe (best-effort)", false)
+    .description(i18n.t("security.audit"))
+    .option("--deep", i18n.t("security.scan"), false)
     .option("--fix", "Apply safe fixes (tighten defaults + chmod state/config)", false)
     .option("--json", "Print JSON", false)
     .action(async (opts: SecurityAuditOptions) => {
@@ -66,9 +69,9 @@ export function registerSecurityCli(program: Command) {
       const muted = (text: string) => (rich ? theme.muted(text) : text);
 
       const lines: string[] = [];
-      lines.push(heading("OpenClaw security audit"));
-      lines.push(muted(`Summary: ${formatSummary(report.summary)}`));
-      lines.push(muted(`Run deeper: ${formatCliCommand("openclaw security audit --deep")}`));
+      lines.push(heading(i18n.t("security.audit")));
+      lines.push(muted(`${i18n.t("security.auditComplete")}: ${formatSummary(report.summary)}`));
+      lines.push(muted(`${i18n.t("security.scanComplete")}`));
 
       if (opts.fix) {
         lines.push(muted(`Fix: ${formatCliCommand("openclaw security audit --fix")}`));

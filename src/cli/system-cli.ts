@@ -1,6 +1,7 @@
 import type { Command } from "commander";
 
 import { danger } from "../globals.js";
+import { getI18n } from "../locale/index.js";
 import { defaultRuntime } from "../runtime.js";
 import { formatDocsLink } from "../terminal/links.js";
 import { theme } from "../terminal/theme.js";
@@ -17,9 +18,11 @@ const normalizeWakeMode = (raw: unknown) => {
 };
 
 export function registerSystemCli(program: Command) {
+  const i18n = getI18n();
+
   const system = program
     .command("system")
-    .description("System tools (events, heartbeat, presence)")
+    .description(i18n.t("cli.commands.system"))
     .addHelpText(
       "after",
       () =>
@@ -29,7 +32,7 @@ export function registerSystemCli(program: Command) {
   addGatewayClientOptions(
     system
       .command("event")
-      .description("Enqueue a system event and optionally trigger a heartbeat")
+      .description(i18n.t("system.diagnostics"))
       .requiredOption("--text <text>", "System event text")
       .option("--mode <mode>", "Wake mode (now|next-heartbeat)", "next-heartbeat")
       .option("--json", "Output JSON", false),

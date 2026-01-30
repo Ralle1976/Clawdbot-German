@@ -13,6 +13,7 @@ import { installUnhandledRejectionHandler } from "../infra/unhandled-rejections.
 import { enableConsoleCapture } from "../logging.js";
 import { getPrimaryCommand, hasHelpOrVersion } from "./argv.js";
 import { tryRouteCli } from "./route.js";
+import { initializeI18n } from "./language-cli.js";
 
 export function rewriteUpdateFlagArgv(argv: string[]): string[] {
   const index = argv.indexOf("--update");
@@ -27,6 +28,7 @@ export async function runCli(argv: string[] = process.argv) {
   const normalizedArgv = stripWindowsNodeExec(argv);
   loadDotEnv({ quiet: true });
   normalizeEnv();
+  initializeI18n();
   ensureOpenClawCliOnPath();
 
   // Enforce the minimum supported runtime before doing any work.

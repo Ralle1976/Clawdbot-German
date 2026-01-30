@@ -2,6 +2,7 @@ import type { Command } from "commander";
 import { listPairingChannels, notifyPairingApproved } from "../channels/plugins/pairing.js";
 import { normalizeChannelId } from "../channels/plugins/index.js";
 import { loadConfig } from "../config/config.js";
+import { getI18n } from "../locale/index.js";
 import { resolvePairingIdLabel } from "../pairing/pairing-labels.js";
 import {
   approveChannelPairingCode,
@@ -46,10 +47,11 @@ async function notifyApproved(channel: PairingChannel, id: string) {
 }
 
 export function registerPairingCli(program: Command) {
+  const i18n = getI18n();
   const channels = listPairingChannels();
   const pairing = program
     .command("pairing")
-    .description("Secure DM pairing (approve inbound requests)")
+    .description(i18n.t("cli.commands.pairing"))
     .addHelpText(
       "after",
       () =>
@@ -58,7 +60,7 @@ export function registerPairingCli(program: Command) {
 
   pairing
     .command("list")
-    .description("List pending pairing requests")
+    .description(i18n.t("nodes.pairing.pending"))
     .option("--channel <channel>", `Channel (${channels.join(", ")})`)
     .argument("[channel]", `Channel (${channels.join(", ")})`)
     .option("--json", "Print JSON", false)
@@ -76,13 +78,13 @@ export function registerPairingCli(program: Command) {
         return;
       }
       if (requests.length === 0) {
-        defaultRuntime.log(theme.muted(`No pending ${channel} pairing requests.`));
+        defaultRuntime.log(theme.muted(`${i18n.t("nodes.pairing.pending")} for ${channel}: none`));
         return;
       }
       const idLabel = resolvePairingIdLabel(channel);
       const tableWidth = Math.max(60, (process.stdout.columns ?? 120) - 1);
       defaultRuntime.log(
-        `${theme.heading("Pairing requests")} ${theme.muted(`(${requests.length})`)}`,
+        `${theme.heading(i18n.t("nodes.pairing.pending"))} ${theme.muted(`(${requests.length})`)}`,
       );
       defaultRuntime.log(
         renderTable({
@@ -105,11 +107,11 @@ export function registerPairingCli(program: Command) {
 
   pairing
     .command("approve")
-    .description("Approve a pairing code and allow that sender")
+    .description(i18n.t("nodes.pairing.approved"))
     .option("--channel <channel>", `Channel (${channels.join(", ")})`)
     .argument("<codeOrChannel>", "Pairing code (or channel when using 2 args)")
-    .argument("[code]", "Pairing code (when channel is passed as the 1st arg)")
-    .option("--notify", "Notify the requester on the same channel", false)
+    .argument("[code]", "Pairing code (when channel is passed as 1st arg)")
+    .option("--notify", "Notify requester on same channel", false)
     .action(async (codeOrChannel, code, opts) => {
       const channelRaw = opts.channel ?? codeOrChannel;
       const resolvedCode = opts.channel ? codeOrChannel : code;
@@ -129,11 +131,11 @@ export function registerPairingCli(program: Command) {
         code: String(resolvedCode),
       });
       if (!approved) {
-        throw new Error(`No pending pairing request found for code: ${String(resolvedCode)}`);
+        throw new Error(`${i18n.t("nodes.pairing.timeout")}: ${String(resolvedCode)}`);
       }
 
       defaultRuntime.log(
-        `${theme.success("Approved")} ${theme.muted(channel)} sender ${theme.command(approved.id)}.`,
+        `${theme.success(i18n.t("nodes.pairing.approved"))} ${theme.muted(channel)} sender ${theme.command(approved.id)}.`,
       );
 
       if (!opts.notify) return;
