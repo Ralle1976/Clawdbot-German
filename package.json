@@ -1,7 +1,7 @@
 {
-  "name": "openclaw",
-  "version": "2026.1.29",
-  "description": "WhatsApp gateway CLI (Baileys web) with Pi RPC agent",
+  "name": "openclaw-german",
+  "version": "2026.1.29-de",
+  "description": "OpenClaw-German: Internationalized fork with German support, security enhancements, and refactored codebase",
   "type": "module",
   "main": "dist/index.js",
   "exports": {
@@ -11,7 +11,7 @@
     "./cli-entry": "./openclaw.mjs"
   },
   "bin": {
-    "openclaw": "./openclaw.mjs"
+    "openclaw-de": "./openclaw.mjs"
   },
   "files": [
     "dist/acp/**",
@@ -32,6 +32,7 @@
     "dist/hooks/**",
     "dist/imessage/**",
     "dist/infra/**",
+    "dist/locale/**",
     "dist/macos/**",
     "dist/media/**",
     "dist/media-understanding/**",
@@ -62,6 +63,8 @@
     "README-header.png",
     "CHANGELOG.md",
     "LICENSE",
+    "I18N.md",
+    "SECURITY-AUDIT.md",
     "scripts/postinstall.js",
     "scripts/format-staged.js",
     "scripts/setup-git-hooks.js",
@@ -144,11 +147,34 @@
     "protocol:gen:swift": "node --import tsx scripts/protocol-gen-swift.ts",
     "protocol:check": "pnpm protocol:gen && pnpm protocol:gen:swift && git diff --exit-code -- dist/protocol.schema.json apps/macos/Sources/OpenClawProtocol/GatewayModels.swift",
     "canvas:a2ui:bundle": "bash scripts/bundle-a2ui.sh",
-    "check:loc": "node --import tsx scripts/check-ts-max-loc.ts --max 500"
+    "check:loc": "node --import tsx scripts/check-ts-max-loc.ts --max 500",
+    "security:audit": "detect-secrets scan --baseline .secrets.baseline",
+    "security:audit:deep": "npm audit && pnpm audit",
+    "i18n:validate": "node --import tsx scripts/i18n-validate.ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ai",
+    "assistant",
+    "cli",
+    "discord",
+    "telegram",
+    "whatsapp",
+    "signal",
+    "i18n",
+    "german",
+    "multilingual",
+    "security"
+  ],
+  "author": "Ralle1976 <info@thaimassage.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ralle1976/Clawdbot-German.git"
+  },
+  "homepage": "https://github.com/Ralle1976/Clawdbot-German#readme",
+  "bugs": {
+    "url": "https://github.com/Ralle1976/Clawdbot-German/issues"
+  },
   "engines": {
     "node": ">=22.12.0"
   },
