@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw German - Qwen Code OAuth Setup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+
+        .step-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0;
+        }
+
+        .step-time {
+            margin-left: auto;
+            background: #e9ecef;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .step-content {
+            margin-top: 20px;
+        }
+
+        code {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            display: block;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        pre {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .terminal {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 5px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .info-box {
+            background: #e9ecef;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .copy-token {
+            display: inline-block;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 3px;
+            padding: 5px 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        .copy-token:hover {
+            background: #e9ecef;
+        }
+
+        .capacity-chart {
+            margin-top: 30px;
+        }
+
+        .capacity-bar {
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .capacity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+
+        .capacity-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .final-cta {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            margin-top: 40px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .final-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 OpenClaw German</h1>
+            <div class="subtitle">Qwen Code OAuth Setup Guide</div>
+        </header>
+
+        <div class="info-box">
+            <strong>🎯 Ziel:</strong> 20.000 KOSTENLOSE Requests/Tag erreichen durch 10 OAuth-Apps<br>
+            <strong>⏱️ Aufbauzeit:</strong> 22 Minuten<br>
+            <strong>💰 Kosten:</strong> $0 (100% FREE!)
+        </div>
+
+        <!-- Schritt 1: qwen-code installieren -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <div class="step-title">qwen-code installieren</div>
+                <div class="step-time">2 Minuten</div>
+            </div>
+            
+            <div class="step-content">
+                <p>Installiere Qwen Code CLI als globale Node-Module:</p>
+                <div class="terminal">
+                    <pre>npm install -g @qwen-code/qwen-code@latest</pre>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>⚠️ Wichtig:</strong> Stelle sicher, dass Node.js 20+ installiert ist.
+                    <br>Prüfe mit: <code>node --version</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schritt 2: qwen.ai Account erstellen -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <div class="step-title">qwen.ai Account erstellen</div>
+                <div class="step-time">3 Minuten</div>
+            </div>
+            
+            <div class="step-content">
+                <p>Gehe zu <a href="https://qwen.ai/" target="_blank" style="color: #667eea; text-decoration: underline;">https://qwen.ai/</a> und registriere dich:</p>
+                
+                <ol>
+                    <li>Klicke auf "Register" / "Registrieren"</li>
+                    <li>Gib deine Email-Adresse ein</li>
+                    <li>Erstelle ein starkes Passwort</li>
+                    <li>Verifiziere deine Email-Adresse</li>
+                    <li>Logge dich ein</li>
+                </ol>
+                
+                <div class="success-box">
+                    <strong>✅ Account erstellt!</strong> Du hast jetzt einen qwen.ai Account.
+                </div>
+            </div>
+        </div>
+
+        <!-- Schritt 3: Developer Console öffnen -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <div class="step-title">Qwen Developer Console öffnen</div>
+                <div class="step-time">2 Minuten</div>
+            </div>
+            
+            <div class="step-content">
+                <p>Gehe zur Qwen Developer Console:</p>
+                <div class="terminal">
+                    <pre>https://qwen.ai/developer</pre>
+                </div>
+                
+                <p>Wähle "OAuth Applications" oder "OAuth 应用":</p>
+            </div>
+        </div>
+
+        <!-- Schritt 4: 10 OAuth-Apps erstellen -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <div class="step-title">10 OAuth-Apps erstellen</div>
+                <div class="step-time">10 Minuten</div>
+            </div>
+            
+            <div class="step-content">
+                <p>Erstelle 10 OAuth-Apps. Klicke für jede App auf "Create Application" (应用创建) und fülle folgendes aus:</p>
+                
+                <div class="info-box">
+                    <strong>📋 App-Konfiguration:</strong>
+                    <ul>
+                        <li><strong>Application Name:</strong> <code>OpenClaw-1</code>, <code>OpenClaw-2</code>, ... <code>OpenClaw-10</code></li>
+                        <li><strong>Application Type:</strong> <code>CLI Tool</code></li>
+                        <li><strong>Description:</strong> <code>OpenClaw German AI Agent - App #1</code>, <code>...App #10</code></li>
+                        <li><strong>Callback URL:</strong> <code>https://openclaw.ai/callback</code> (oder <code>http://localhost:3000</code> für Tests)</li>
+                        <li><strong>Scopes:</strong> <code>chat:write</code> und <code>read</code> (oder nur die nötigen)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Detaillierter Vorgang für App #1:</strong></p>
+                <ol>
+                    <li>Klicke auf "Create Application"</li>
+                    <li>Fülle die obenstehenden Felder aus</li>
+                    <li>Klicke erneut auf "Create Application"</li>
+                    <li>Suche nach "OAuth Client ID" und "OAuth Client Secret"</li>
+                    <li>Klicke auf "Generate OAuth Token" (生成 OAuth Token)</li>
+                    <li>Dein OAuth-Token wird angezeigt: <code>sk-qwen-xxxx</code></li>
+                    <li><strong>Kopiere diesen Token!</strong> (er wird gleich in .env benötigt)</li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>⚠️ Wichtig:</strong> Wiederhole diesen Vorgang für Apps #2 bis #10 mit den entsprechendenn Namen (<code>OpenClaw-2</code> bis <code>OpenClaw-10</code>).
+                    <br>Jede App muss ihren eigenen OAuth-Token haben!
+                </div>
+
+                <div class="success-box">
+                    <strong>✅ Fertig!</strong> Du hast jetzt 10 OAuth-Tokens.
+                    <br>10 Apps × 2.000 Requests/Tag = 20.000 Requests/Tag!
+                </div>
+            </div>
+        </div>
+
+        <!-- Schritt 5: Tokens in .env speichern -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">5</div>
+                <div class="step-title">OAuth-Tokens in .env speichern</div>
+                <div class="step-time">5 Minuten</div>
+            </div>
+            
+            <div class="step-content">
+                <p>Erstelle eine <code>.env</code> Datei im Projektverzeichnis und trage deine 10 OAuth-Tokens ein:</p>
+                
+                <div class="terminal">
+                    <pre># Qwen OAuth Apps (10 Apps = 20.000 Requests/Tag!)
+QWEN_OAUTH_APP_1=sk-qwen-xxxx-xxxx-xxxx-xxxx
+QWEN_OAUTH_APP_2=sk-qwen-yyyy-yyyy-yyyy-yyyy
+QWEN_OAUTH_APP_3=sk-qwen-zzzz-zzzz-zzzz-zzzz
+QWEN_OAUTH_APP_4=sk-qwen-aaaa-aaaa-aaaa-aaaa
+QWEN_OAUTH_APP_5=sk-qwen-bbbb-bbbb-bbbb-bbbb
+QWEN_OAUTH_APP_6=sk-qwen-cccc-cccc-cccc-cccc
+QWEN_OAUTH_APP_7=sk-qwen-dddd-dddd-dddd-dddd
+QWEN_OAUTH_APP_8=sk-qwen-eeee-eeee-eeee-eeee
+QWEN_OAUTH_APP_9=sk-qwen-ffffffff-ffff-ffff
+QWEN_OAUTH_APP_10=sk-qwen-gggg-gggg-gggg-gggg</pre>
+                </div>
+                
+                <p>Speichere die Datei.</p>
+                <div class="info-box">
+                    <strong>💡 Tipp:</strong> Du kannst die .env Datei mit VS Code, nano, oder jedem anderen Text-Editor öffnen.
+                    <br>Kopiere einfach die 10 OAuth-Tokens und trage sie in die Datei ein.
+                </div>
+            </div>
+        </div>
+
+        <!-- Kapazität -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">🎉</div>
+                <div class="step-title">Gesamtkapazität</div>
+            </div>
+            
+            <div class="step-content">
+                <div class="capacity-chart">
+                    <div class="capacity-label">
+                        <span>Qwen OAuth (10 Apps)</span>
+                        <span>20.000 Requests/Tag</span>
+                    </div>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: 100%;"></div>
+                    </div>
+                    
+                    <div class="capacity-label">
+                        <span>Groq (5 Apps)</span>
+                        <span>129.600 Requests/Tag</span>
+                    </div>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: 100%; background: linear-gradient(90deg, #00c853 0%, #00d2ff 100%);"></div>
+                    </div>
+                    
+                    <div class="capacity-label">
+                        <span>DeepSeek (3 Apps)</span>
+                        <span>~15.000 Requests/Tag</span>
+                    </div>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: 100%; background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);"></div>
+                    </div>
+                    
+                    <div class="capacity-label">
+                        <span>Local LLMs</span>
+                        <span>UNLIMITED</span>
+                    </div>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: 100%; background: linear-gradient(90deg, #f95738 0%, #00d2ff 100%);"></div>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <strong>📊 Gesamtkapazität:</strong>
+                    <ul>
+                        <li><strong>Daily Requests:</strong> ~165.000</li>
+                        <li><strong>Monthly Requests:</strong> ~4.950.000</li>
+                        <li><strong>Kosten:</strong> $0 (100% FREE!)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fertig! -->
+        <div class="step">
+            <div class="step-header">
+                <div class="step-number">✅</div>
+                <div class="step-title">Fertig!</div>
+            </div>
+            
+            <div class="step-content">
+                <p>Du hast die 10 OAuth-Tokens erfolgreich erstellt und in .env gespeichert!</p>
+                
+                <div class="success-box">
+                    <strong>🎉 Gratulation!</strong><br><br>
+                    Du hast jetzt eine massiv kostenlose LLM-Infrastruktur:<br><br>
+                    ✅ 20.000 Requests/Tag (Qwen OAuth)<br>
+                    ✅ 129.600 Requests/Tag (Groq)<br>
+                    ✅ UNLIMITED Local LLMs<br><br>
+                    ✅ ~165.000 Requests/Tag GESAMT!<br><br>
+                    ✅ $0 KOSTEN!<br><br>
+                    Der Heilige Gral ist erreicht! 🏆
+                </div>
+                
+                <div class="warning-box">
+                    <strong>📝 Nächste Schritte:</strong>
+                    <ol>
+                        <li>Starte den Clawdbot-German Server: <code>npm run dev</code></li>
+                        <li>Stelle eine Frage: "Wie kann ich diesen Code verbessern?"</li>
+                        <li>Der Qwen Code Provider nutzt deine OAuth-Tokens automatisch</li>
+                        <li>Genieß 20.000 kostenlose Requests/Tag!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="final-cta">
+            <strong>🚀 Starte jetzt Clawdbot-German!</strong><br><br>
+            <button class="copy-btn" onclick="window.open('https://github.com/Ralle1976/Clawdbot-German', '_blank')">
+                GitHub Repository
+            </button>
+        </div>
+
+        <footer>
+            <p style="text-align: center; margin-top: 50px; opacity: 0.7;">
+                OpenClaw German - Massive Free LLM Capacity<br>
+                <a href="https://github.com/Ralle1976/Clawdbot-German" target="_blank" style="color: #667eea;">GitHub</a> | 
+                <a href="https://discord.gg/ycKBjdNd" target="_blank" style="color: #667eea;">Discord</a>
+            </p>
+        </footer>
+
+        <script>
+            // Copy tokens to clipboard (optional)
+            function copyToken(token) {
+                navigator.clipboard.writeText(token);
+                alert('OAuth-Token kopiert: ' + token);
+            }
+            
+            // Copy entire .env content
+            function copyEnvContent() {
+                const content = `# Qwen OAuth Apps (10 Apps = 20.000 Requests/Tag!)
+QWEN_OAUTH_APP_1=sk-qwen-xxxx
+QWEN_OAUTH_APP_2=sk-qwen-yyyy
+QWEN_OAUTH_APP_3=sk-qwen-zzzz
+QWEN_OAUTH_APP_4=sk-qwen-aaaa
+QWEN_OAUTH_APP_5=sk-qwen-bbbb
+QWEN_OAUTH_APP_6=sk-qwen-cccc
+QWEN_OAUTH_APP_7=sk-qwen-dddd
+QWEN_OAUTH_APP_8=sk-qwen-eeee
+QWEN_OAUTH_APP_9=sk-qwen-ffff
+QWEN_OAUTH_APP_10=sk-qwen-gggg`;
+                
+                navigator.clipboard.writeText(content);
+                alert('.env-Inhalt kopiert! Füge ihn in deine .env Datei ein.');
+            }
+        </script>
+    </div>
+</body>
+</html>
