@@ -8,9 +8,9 @@
 import { spawn } from 'child_process';
 import fs from 'fs/promises';
 
-console.log('╔════════════════════════════════════════════════════╗');
-console.log('║     Web Research Tool - HONEST TRUTH FINDER      ║');
-console.log('║           NO SPECULATION, ONLY FACTS             ║');
+console.log('╔══════════════════════════════════════════════════╗');
+console.log('║     Web Research Tool - HONEST TRUTH FINDER     ║');
+console.log('║           NO SPECULATION, ONLY FACTS              ║');
 console.log('╚════════════════════════════════════════════════════╝\n');
 
 /**
@@ -18,7 +18,7 @@ console.log('╚═════════════════════�
  */
 async function researchGwenFreeTier() {
   console.log('🔍 Research Topic: Gwen-Free-Tier\n');
-  console.log('──────────────────────────────────────────────────\n');
+  console.log('──────────────────────────────────────────\n');
 
   const queries = [
     'Gwen-Free-Tier',
@@ -47,23 +47,23 @@ async function researchGwenFreeTier() {
       const resultMatches = html.match(/class="result__a".*?href="(https?:[^"]+)"/g) || [];
 
       for (const match of resultMatches) {
-        const urlResult = match.match(/href="([^"]+)"/);
-        if (urlResult) {
-          const url = urlResult[1];
+        const urlMatch = match.match(/href="([^"]+)"/);
+        if (urlMatch) {
+          const url = urlMatch[1];
 
           // Filter for relevant results
           if (url.includes('gwen') || url.includes('free') || url.includes('claude')) {
             results.push(url);
-            console.log(`  ✓ Found: ${url}`);
+            console.log(` ✓ Found: ${url}`);
           }
         }
       }
     } catch (error) {
-      console.log(`✗ Error: ${(error as Error).message}`);
+      console.log(`✗ Error: ${error.message}`);
     }
   }
 
-  console.log(`\n✓ Found ${results.length} relevant results for Gwen-Free-Tier\n`);
+  console.log(`\n✓ Found ${results.length} relevant results\n`);
 
   // Read promising pages
   for (const url of results.slice(0, 3)) {
@@ -77,7 +77,7 @@ async function researchGwenFreeTier() {
       });
 
       if (!response.ok) {
-        console.log(`  ✗ Failed to fetch: ${response.status}`);
+        console.log(` ✗ Failed to fetch: ${response.status}`);
         continue;
       }
 
@@ -89,7 +89,7 @@ async function researchGwenFreeTier() {
       const freeSection = extractSection(text, ['free', 'unlimited', 'gratis', 'kostenlos']);
       const apiSection = extractSection(text, ['api', 'endpoint', 'key', 'documentation', 'docs']);
 
-      console.log('  ✓ Page read successfully');
+      console.log(' ✓ Page read successfully');
       console.log(`  - Pricing info: ${priceSection ? 'Found' : 'Not found'}`);
       console.log(`  - Free tier info: ${freeSection ? 'Found' : 'Not found'}`);
       console.log(`  - API info: ${apiSection ? 'Found' : 'Not found'}`);
@@ -116,7 +116,7 @@ ${text.substring(0, 2000)}
 `);
       }
     } catch (error) {
-      console.log(`  ✗ Failed to read page: ${(error as Error).message}`);
+      console.log(` ✗ Failed to read page: ${error.message}`);
     }
   }
 
@@ -128,11 +128,11 @@ ${text.substring(0, 2000)}
  */
 async function researchQwenFreeTier() {
   console.log('\n🔍 Research Topic: Qwen Free Tier\n');
-  console.log('──────────────────────────────────────────────────\n');
+  console.log('──────────────────────────────────────────\n');
 
   const queries = [
-    'Qwen API pricing tokens cost 2025',
-    'Qwen DashScope API free tier unlimited',
+    'Qwen API pricing tokens cost 2025 free tier',
+    'Qwen DashScope API pricing unlimited tokens 2025',
     'Qwen 1000 requests per day',
     'Qwen 10M tokens per month free',
   ];
@@ -156,23 +156,23 @@ async function researchQwenFreeTier() {
       const resultMatches = html.match(/class="result__a".*?href="(https?:[^"]+)"/g) || [];
 
       for (const match of resultMatches) {
-        const urlResult = match.match(/href="([^"]+)"/);
-        if (urlResult) {
-          const url = urlResult[1];
+        const urlMatch = match.match(/href="([^"]+)"/);
+        if (urlMatch) {
+          const url = urlMatch[1];
 
           // Filter for relevant results
           if (url.includes('aliyun') || url.includes('qwen') || url.includes('dashscope')) {
             results.push(url);
-            console.log(`  ✓ Found: ${url}`);
+            console.log(` ✓ Found: ${url}`);
           }
         }
       }
     } catch (error) {
-      console.log(`✗ Error: ${(error as Error).message}`);
+      console.log(`✗ Error: ${error.message}`);
     }
   }
 
-  console.log(`\n✓ Found ${results.length} relevant results for Qwen Free Tier\n`);
+  console.log(`\n✓ Found ${results.length} relevant results\n`);
 
   // Read official pages
   for (const url of results.slice(0, 2)) {
@@ -186,7 +186,7 @@ async function researchQwenFreeTier() {
       });
 
       if (!response.ok) {
-        console.log(`  ✗ Failed to fetch: ${response.status}`);
+        console.log(` ✗ Failed to fetch: ${response.status}`);
         continue;
       }
 
@@ -197,7 +197,7 @@ async function researchQwenFreeTier() {
       const pricingSection = extractSection(text, ['price', 'cost', 'free', 'tier', 'quota', 'limit', '请求', 'token']);
       const officialSection = extractSection(text, ['官方', 'official', 'documentation', '文档', 'api']);
 
-      console.log('  ✓ Official page read successfully');
+      console.log(' ✓ Official page read successfully');
       console.log(`  - Pricing info: ${pricingSection ? 'Found' : 'Not found'}`);
       console.log(`  - Official info: ${officialSection ? 'Found' : 'Not found'}`);
 
@@ -220,7 +220,7 @@ ${text.substring(0, 3000)}
 `);
       }
     } catch (error) {
-      console.log(`  ✗ Failed to read page: ${(error as Error).message}`);
+      console.log(` ✗ Failed to read page: ${error.message}`);
     }
   }
 
@@ -232,11 +232,10 @@ ${text.substring(0, 3000)}
  */
 async function researchDeepSeekFreeTier() {
   console.log('\n🔍 Research Topic: DeepSeek Free Tier\n');
-  console.log('──────────────────────────────────────────────────\n');
+  console.log('──────────────────────────────────────────\n');
 
   const queries = [
-    'DeepSeek API pricing tokens 2025',
-    'DeepSeek "unlimited" free tier',
+    'DeepSeek API pricing tokens cost 2025 free tier',
     'DeepSeek unlimited requests per day',
     'DeepSeek API documentation',
   ];
@@ -260,23 +259,23 @@ async function researchDeepSeekFreeTier() {
       const resultMatches = html.match(/class="result__a".*?href="(https?:[^"]+)"/g) || [];
 
       for (const match of resultMatches) {
-        const urlResult = match.match(/href="([^"]+)"/);
-        if (urlResult) {
-          const url = urlResult[1];
+        const urlMatch = match.match(/href="([^"]+)"/);
+        if (urlMatch) {
+          const url = urlMatch[1];
 
           // Filter for relevant results
           if (url.includes('deepseek') || url.includes('api') || url.includes('platform')) {
             results.push(url);
-            console.log(`  ✓ Found: ${url}`);
+            console.log(` ✓ Found: ${url}`);
           }
         }
       }
     } catch (error) {
-      console.log(`✗ Error: ${(error as Error).message}`);
+      console.log(`✗ Error: ${error.message}`);
     }
   }
 
-  console.log(`\n✓ Found ${results.length} relevant results for DeepSeek Free Tier\n`);
+  console.log(`\n✓ Found ${results.length} relevant results\n`);
 
   // Read official pages
   for (const url of results.slice(0, 2)) {
@@ -290,7 +289,7 @@ async function researchDeepSeekFreeTier() {
       });
 
       if (!response.ok) {
-        console.log(`  ✗ Failed to fetch: ${response.status}`);
+        console.log(` ✗ Failed to fetch: ${response.status}`);
         continue;
       }
 
@@ -300,7 +299,7 @@ async function researchDeepSeekFreeTier() {
       // Extract official information
       const pricingSection = extractSection(text, ['price', 'cost', 'free', 'unlimited', 'quota', 'limit', '定价', '免费', '无限']);
 
-      console.log('  ✓ Official page read successfully');
+      console.log(' ✓ Official page read successfully');
       console.log(`  - Pricing/Free tier: ${pricingSection ? 'Found' : 'Not found'}`);
 
       // Save findings
@@ -319,7 +318,7 @@ ${text.substring(0, 3000)}
 `);
       }
     } catch (error) {
-      console.log(`  ✗ Failed to read page: ${(error as Error).message}`);
+      console.log(` ✗ Failed to read page: ${error.message}`);
     }
   }
 
@@ -371,8 +370,8 @@ async function createResearchDirectory() {
  * Generate research summary
  */
 function generateSummary(gwenResults, qwenResults, deepseekResults) {
-  console.log('\n╔══════════════════════════════════════════════════╗');
-  console.log('║             RESEARCH SUMMARY                       ║');
+  console.log('\n╔════════════════════════════════════════════════════╗');
+  console.log('║                    RESEARCH SUMMARY                        ║');
   console.log('╚════════════════════════════════════════════════════╝\n');
 
   const summary = `# Web Research Findings - HONEST FACTS ONLY
@@ -413,7 +412,7 @@ All findings are based on:
 
 ### VERIFICATION
 To verify findings:
-1. Check the official documentation
+1. Check against official documentation
 2. Test with real API keys
 3. Monitor actual usage and limits
 4. Check billing statements
